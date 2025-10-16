@@ -30,7 +30,7 @@ class Vehicle
 
     public function setRegistrationNumber($registrationNumber)
     {
-        $this->registrationNumber = $registrationNumber;
+        $this->registrationNumber = strtoupper($registrationNumber);
         return $this;
     }
 

@@ -31,7 +31,7 @@ class VehiclesWriter
     {
         $vehicle = new Vehicle();
         $vehicle->setId($vehicleDTO->id);
-        $vehicle->setRegistrationNumber(strtoupper($vehicleDTO->registrationNumber));
+        $vehicle->setRegistrationNumber($vehicleDTO->registrationNumber);
         $vehicle->setBrand($vehicleDTO->brand);
         $vehicle->setModel($vehicleDTO->model);
         $vehicle->setType($vehicleDTO->type);
