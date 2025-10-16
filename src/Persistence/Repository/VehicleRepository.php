@@ -29,7 +29,16 @@ class VehicleRepository implements VehicleRepositoryInterface
 
     public function getById($id)
     {
+        $sql = "SELECT * FROM vehicles WHERE id=:id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch();
 
+        if(!$row) {
+            return null;
+        }
+
+        return $this->rowToEntity($row);
     }
 
     public function deleteById($id)
