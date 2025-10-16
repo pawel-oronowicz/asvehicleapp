@@ -34,7 +34,11 @@ class VehicleRepository implements VehicleRepositoryInterface
 
     public function deleteById($id)
     {
+        $sql = "DELETE FROM vehicles WHERE id=:id";
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute(['id' => $id]);
 
+        return $result;
     }
 
     public function persist(Vehicle $vehicle)

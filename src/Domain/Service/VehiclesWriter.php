@@ -22,7 +22,9 @@ class VehiclesWriter
 
     public function deleteById($id)
     {
+        $item = $this->vehicleRepository->deleteById($id);
 
+        return $item;
     }
 
     private function DTOToEntity(VehicleDTO $vehicleDTO)

@@ -11,6 +11,6 @@ export default {
     return axios.post(url, vehicle);
   },
   delete(id) {
-    return axios.delete(`${API_BASE}/${id}`);
+    return axios.post(`${API_BASE}/delete/${id}`);
   }
 }

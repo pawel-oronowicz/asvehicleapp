@@ -42,6 +42,8 @@ class VehicleController extends BaseController
 
     public function delete(int $id): JsonResponse
     {
+        (new VehiclesWriter(new VehicleRepository()))->deleteById($id);
+
         return $this->toJsonResponse([$id]);
     }
 }
