@@ -7,10 +7,8 @@ export default {
     return axios.get(`${API_BASE}/list`);
   },
   save(vehicle) {
-    return axios.post(API_BASE, vehicle);
-  },
-  save(vehicle) {
-    return axios.put(`${API_BASE}/${vehicle.id}`, vehicle);
+    const url = vehicle.id ? `${API_BASE}/save/${vehicle.id}` : `${API_BASE}/save/0`
+    return axios.post(url, vehicle);
   },
   delete(id) {
     return axios.delete(`${API_BASE}/${id}`);

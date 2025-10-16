@@ -2,6 +2,7 @@
 
 namespace Domain\Service;
 
+use Domain\Entity\Vehicle;
 use Domain\Repository\VehicleRepositoryInterface;
 
 class VehiclesWriter
@@ -12,11 +13,29 @@ class VehiclesWriter
 
     public function saveVehicle(VehicleDTO $vehicleDTO)
     {
+        $vehicle = $this->DTOToEntity($vehicleDTO);
 
+        $item = $this->vehicleRepository->persist($vehicle);
+
+        return $item;
     }
 
     public function deleteById($id)
     {
 
+    }
+
+    private function DTOToEntity(VehicleDTO $vehicleDTO)
+    {
+        $vehicle = new Vehicle();
+        $vehicle->setId($vehicleDTO->id);
+        $vehicle->setRegistrationNumber(strtoupper($vehicleDTO->registrationNumber));
+        $vehicle->setBrand($vehicleDTO->brand);
+        $vehicle->setModel($vehicleDTO->model);
+        $vehicle->setType($vehicleDTO->type);
+        $vehicle->setCreatedAt($vehicleDTO->createdAt);
+        $vehicle->setUpdatedAt($vehicleDTO->updatedAt);
+
+        return $vehicle;
     }
 }

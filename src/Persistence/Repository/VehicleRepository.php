@@ -39,7 +39,31 @@ class VehicleRepository implements VehicleRepositoryInterface
 
     public function persist(Vehicle $vehicle)
     {
+        $data = [
+            'registration_number' => $vehicle->getRegistrationNumber(),
+            'brand' => $vehicle->getBrand(),
+            'model' => $vehicle->getModel(),
+            'type' => $vehicle->getType(),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
 
+        if($vehicle->getId() === 0) {
+            $data['created_at'] = date('Y-m-d H:i:s');
+
+            $sql = "INSERT INTO vehicles (registration_number, brand, model, type, created_at, updated_at) 
+                VALUES (:registration_number, :brand, :model, :type, :created_at, :updated_at)";
+        } else {
+            $data['id'] = $vehicle->getId();
+
+            $sql = "UPDATE vehicles 
+                    SET registration_number=:registration_number, brand=:brand, model=:model, type=:type, updated_at=:updated_at
+                    WHERE id=:id";
+        }
+        
+        $stmt = $this->pdo->prepare($sql);
+        $result = $stmt->execute($data);
+
+        return $result;
     }
 
     private function rowToEntity($row)

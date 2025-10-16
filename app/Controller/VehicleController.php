@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use Domain\Service\VehicleDTO;
 use Domain\Service\VehiclesBuilder;
+use Domain\Service\VehiclesWriter;
 use Persistence\Repository\VehicleRepository;
 use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
@@ -25,7 +27,17 @@ class VehicleController extends BaseController
     public function save(int $id, Request $request): JsonResponse
     {
         $content = json_decode($request->getContent());
-        return $this->toJsonResponse([$id, $content]);
+
+        $vehicleDTO = new VehicleDTO();
+        $vehicleDTO->id = $id;
+        $vehicleDTO->registrationNumber = $content->registrationNumber;
+        $vehicleDTO->brand = $content->brand;
+        $vehicleDTO->model = $content->model;
+        $vehicleDTO->type = $content->type;
+
+        $vehicle = (new VehiclesWriter(new VehicleRepository()))->saveVehicle($vehicleDTO);
+        
+        return $this->toJsonResponse([$id, $vehicle]);
     }
 
     public function delete(int $id): JsonResponse

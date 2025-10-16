@@ -26,7 +26,7 @@ try {
     ));
     $routes->add('save', new Route(
         path: '/vehicles/save/{id}',
-        defaults: ['controller' => VehicleController::class, 'method' => 'save'],
+        defaults: ['controller' => VehicleController::class, 'method' => 'save', 'id' => 0],
         requirements: ['id' => '[0-9]+'],
         methods: ['POST'],
     ));

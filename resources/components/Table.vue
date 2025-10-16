@@ -147,9 +147,10 @@
                     { text: 'Vehicle Type', value: 'type' },
                     { text: 'Creation Date', value: 'createdAt' },
                     { text: 'Modification Date', value: 'updatedAt' },
-                    { text: 'Actions', value: 'iron', sortable: false },
+                    { text: 'Actions', value: 'actions', sortable: false },
                 ],
                 vehicles: [],
+                editedIndex: -1,
                 editedItem: {
                     registrationNumber: '',
                     brand: '',
@@ -187,13 +188,58 @@
                 .catch(err => console.error(err))
             },
 
+            async editItem (item) {
+                const { data } = await vehicleService.get
+                this.editedIndex = this.vehicles.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialog = true
+            },
+
+            deleteItem (item) {
+                this.editedIndex = this.vehicles.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialogDelete = true
+            },
+
+            deleteItemConfirm () {
+                this.vehicles.splice(this.editedIndex, 1)
+                this.closeDelete()
+            },
+
             close () {
                 this.dialog = false
                 this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
+                    this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
                 })
-            }
+            },
+
+            closeDelete () {
+                this.dialogDelete = false
+                this.$nextTick(() => {
+                    this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                })
+            },
+
+            async save () {
+                try {
+                    await vehicleService.save(this.editedItem)
+
+                    if (this.editedIndex > -1) {
+                        // Update existing vehicle
+                        Object.assign(this.vehicles[this.editedIndex], this.editedItem)
+                    } else {
+                        // Add new vehicle
+                        this.vehicles.push(this.editedItem)
+                    }
+
+                    this.close()
+                } catch (error) {
+                    console.error('Error saving vehicle:', error);
+                    alert('Failed to save vehicle. Please try again.');
+                }
+            },
         }
     }
 </script>
